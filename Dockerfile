@@ -12,8 +12,8 @@ RUN npm run build
 WORKDIR ./dist
 
 # Ignoreed when also specified in docker-compose.
-ENV API_PORT=5001
+ENV API_PORT=5000
 
-EXPOSE 5001
+EXPOSE 5000
 
 CMD node app.js
