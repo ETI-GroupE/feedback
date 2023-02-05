@@ -57,6 +57,55 @@ app.get('/feedbacks', async (req: Request, res: Response) => {
 
 })
 
+app.get('/feedbacks/stats', async (req: Request, res: Response) => {
+    console.log('/feedbacks/stats (GET)')
+    const { product_id } = req.query;
+
+    if ([product_id].includes(undefined)) {
+        res.status(400);
+        res.send();
+        return;
+    }
+
+    writePool.query(
+        `
+        SELECT * FROM feedback
+        WHERE product_id = ?
+        ORDER BY created_at_date DESC
+        `,
+        [product_id],
+        (err, result) => {
+            const feedback = {
+                rating: 0,
+                feedbacks: [],
+            };
+            if (err) {
+                res.status(400);
+            } else {
+                res.status(200);
+
+                let tempTotalRating = 0;
+                let tempNumberRating = 0;
+
+                // @ts-ignore
+                result.forEach(row => {
+                    const date = new Date(row.created_at_date)
+                    feedback.feedbacks.push({
+                        date: `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
+                        description: row.description
+                    })
+
+                    tempTotalRating += row.rating;
+                    tempNumberRating++
+                });
+                feedback.rating = Math.round(tempTotalRating / tempNumberRating)
+            }
+
+            res.send(feedback)
+        })
+
+})
+
 app.get('/feedbacks/length', async (req: Request, res: Response) => {
     console.log('/feedbacks/length (GET)')
     const { product_id, user_id } = req.query;
