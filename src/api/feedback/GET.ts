@@ -92,7 +92,8 @@ app.get('/feedbacks/stats', async (req: Request, res: Response) => {
                     const date = new Date(row.created_at_date)
                     feedback.feedbacks.push({
                         date: `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
-                        description: row.description
+                        description: row.description,
+                        rating: row.rating,
                     })
 
                     tempTotalRating += row.rating;
