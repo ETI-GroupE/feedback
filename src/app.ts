@@ -14,9 +14,9 @@ app.use(cookieParser());
 
 import productAPI from "./api/feedback";
 import verifyAuth from './middleware/verifyAuth';
-if (process.env.K_SERVICE) {
-    app.use(verifyAuth);
-}
+// if (process.env.K_SERVICE) {
+//     app.use(verifyAuth);
+// }
 app.use("/api/v1",
     productAPI,
 )
